@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Precio Final</title>
+</head>
+<body>
+  <h1>Calculadora de Precio Final</h1>
+
+  <label for="valor">Ingresa el valor original (A2):</label>
+  <input type="number" id="valor" placeholder="Valor de A2">
+  <br><br>
+
+  <label for="impuesto">Porcentaje de impuesto (%):</label>
+  <input type="number" id="impuesto" placeholder="7" value="7">
+  <br><br>
+
+  <label for="f2">Ganancia si A3 <= 200:</label>
+  <input type="number" id="f2" placeholder="42" value="42">
+  <br><br>
+
+  <label for="g2">Ganancia si A3 > 200 y <= 300:</label>
+  <input type="number" id="g2" placeholder="59" value="59">
+  <br><br>
+
+  <label for="h2">Ganancia si A3 > 300 y <= 500:</label>
+  <input type="number" id="h2" placeholder="95" value="95">
+  <br><br>
+
+  <label for="multiplicador">Multiplicador (por ejemplo: precio dólar):</label>
+  <input type="number" id="multiplicador" placeholder="Valor multiplicador">
+  <br><br>
+
+  <label for="porcentajeExtra">Multiplicar por (porcentaje si A3 > 500, ejemplo 1.25):</label>
+  <input type="number" id="porcentajeExtra" placeholder="1.25" value="1.25">
+  <br><br>
+
+  <button onclick="calcular()">Calcular</button>
+
+  <h2>Resultados:</h2>
+  <p id="valorA3">Valor A3 (con impuesto): -</p>
+  <p id="resultadoFinal">Precio final base: -</p>
+  <p id="resultadoMultiplicado">Precio final multiplicado: -</p>
+
+  <script>
+    function calcular() {
+      const A2 = parseFloat(document.getElementById('valor').value);
+      const impuesto = parseFloat(document.getElementById('impuesto').value) / 100;
+      const F2 = parseFloat(document.getElementById('f2').value);
+      const G2 = parseFloat(document.getElementById('g2').value);
+      const H2 = parseFloat(document.getElementById('h2').value);
+      const multiplicador = parseFloat(document.getElementById('multiplicador').value);
+      const porcentajeExtra = parseFloat(document.getElementById('porcentajeExtra').value);
+
+      if (isNaN(A2) || isNaN(impuesto) || isNaN(F2) || isNaN(G2) || isNaN(H2) || isNaN(multiplicador) || isNaN(porcentajeExtra)) {
+        document.getElementById('valorA3').innerText = "Por favor, ingresa números válidos.";
+        document.getElementById('resultadoFinal').innerText = "";
+        document.getElementById('resultadoMultiplicado').innerText = "";
+        return;
+      }
+
+      const A3 = A2 * (1 + impuesto);
+      document.getElementById('valorA3').innerText = `Valor A3 (con impuesto): ${A3.toFixed(2)}`;
+
+      let resultado;
+      if (A3 <= 200) {
+        resultado = A3 + F2;
+      } else if (A3 > 200 && A3 <= 300) {
+        resultado = A3 + G2;
+      } else if (A3 > 300 && A3 <= 500) {
+        resultado = A3 + H2;
+      } else {
+        resultado = A3 * porcentajeExtra;
+      }
+
+      document.getElementById('resultadoFinal').innerText = `Precio final base: ${resultado.toFixed(2)}`;
+
+      const resultadoMultiplicado = resultado * multiplicador;
+      document.getElementById('resultadoMultiplicado').innerText = `Precio final multiplicado: ${resultadoMultiplicado.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
